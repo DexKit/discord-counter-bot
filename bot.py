@@ -8,7 +8,8 @@ import requests
 ## logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
 load_dotenv()
-bot = commands.Bot(command_prefix="/")
+intents = discord.Intents.default()
+bot = commands.Bot(command_prefix="/", intents=intents)
 
 CHANNEL_ID = 1115996050482798682
 CHANNEL_NAME = 'CryptoApp Counter'
