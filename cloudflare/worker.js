@@ -4,7 +4,14 @@ export default {
       const API_URL = env.API_URL;
       const BOT_TOKEN = env.BOT_TOKEN;
       const CHANNEL_ID = env.CHANNEL_ID;
-      const CHANNEL_NAME = 'CryptoApp Counter';
+      const CHANNEL_NAME = 'DApp Counter';
+
+      const formatNumber = (number) => {
+        if (number >= 1000) {
+          return (number / 1000).toFixed(1) + 'k';
+        }
+        return number.toString();
+      };
 
       const updateChannel = async () => {
         try {
@@ -17,16 +24,17 @@ export default {
           const data = await response.json();
 
           if (!data.total) {
-            throw new Error("Response doesn't contain a 'total'.");
+            throw new Error("Response does not contain a 'total'.");
           }
 
           const total = data.total;
+          const formattedTotal = formatNumber(total);
           const discordAPIEndpoint = `https://discord.com/api/v9/channels/${CHANNEL_ID}`;
           const headers = {
             'Authorization': `Bot ${BOT_TOKEN}`,
             'Content-Type': 'application/json',
           };
-          const body = JSON.stringify({ name: `${CHANNEL_NAME}: ${total}` });
+          const body = JSON.stringify({ name: `${CHANNEL_NAME}: ${formattedTotal}` });
           const res = await fetch(discordAPIEndpoint, { method: 'PATCH', headers, body });
 
           if (!res.ok) {
@@ -34,7 +42,7 @@ export default {
           }
         } catch (error) {
           console.error('Error updating channel:', error);
-          throw new Error('Error: Something happened and the channel cannot be updated.');
+          throw new Error('Error: Something happened and the channel could not be updated.');
         }
       };
 
